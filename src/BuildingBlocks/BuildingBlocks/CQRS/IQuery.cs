@@ -2,7 +2,13 @@
 
 namespace BuildingBlocks
 {
-    public interface IQuery<TResponse> : IRequest<TResponse>  where TResponse : notnull
+    /// <summary>
+    /// IQuery Interface that returns a response
+    /// </summary>
+    /// <typeparam name="TResponse"></typeparam>
+    public interface IQuery<TResponse> 
+        : IRequest<TResponse>  
+        where TResponse : notnull
     {
     }
    
