@@ -1,7 +1,4 @@
-﻿using BuildingBlocks;
-using BuildingBlocks.CQRS;
-using Catalog.API.Models;
-using MediatR;
+﻿
 
 namespace Catalog.API.Products.CreateProduct
 {
@@ -31,7 +28,7 @@ namespace Catalog.API.Products.CreateProduct
     //    }
     //}
 
-    public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
+    public class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
@@ -51,9 +48,17 @@ namespace Catalog.API.Products.CreateProduct
 
             // 2 - Save the product to the database
 
+            // 2.1 - Store the product in the session
+            session.Store(product);
+
+            // 2.2 - Save the changes to the database
+
+            await session.SaveChangesAsync(cancellationToken);
+
+
             // 3 - Return CreateProductResult with the Id of the newly created product
 
-            return new CreateProductResult(Guid.NewGuid());
+            return new CreateProductResult(product.Id);
 
 
         }
