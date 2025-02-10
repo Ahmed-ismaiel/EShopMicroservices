@@ -1,5 +1,4 @@
 ﻿
-
 namespace Catalog.API.Products.CreateProduct
 {
     /// <summary>
@@ -19,6 +18,24 @@ namespace Catalog.API.Products.CreateProduct
     /// The Type of Result (Response) that will be returned after creating a product
     public record CreateProductResult(Guid Id);
 
+    /// <summary>
+    /// Validator
+    /// </summary>
+    /// <param name="session"></param>
+
+    public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+    {
+        public CreateProductCommandValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+            //RuleFor(x => x.Description).NotEmpty();
+            RuleFor(x => x.ImageFile).NotEmpty().WithMessage("ImageFile is required");
+            RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price should be greater thank 0");
+        }
+    }
+
+
     //public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResult>
     //{
     //    public Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -28,11 +45,17 @@ namespace Catalog.API.Products.CreateProduct
     //    }
     //}
 
-    public class CreateProductCommandHandler(IDocumentSession session) : ICommandHandler<CreateProductCommand, CreateProductResult>
+    public class CreateProductCommandHandler(IDocumentSession session
+        , ILogger<CreateProductCommandHandler> logger) 
+        : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
+
+            logger.LogInformation("createproductHandler {@Command}", command);
+
             // business logic to create a product
+
 
             // 1 - Create a new Product Entiy with the data from the command
 
