@@ -1,4 +1,8 @@
 
+using BuildingBlocks.Exceptions.Handler;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container.
@@ -36,6 +40,7 @@ builder.Services.AddMarten(opts =>
 }).UseLightweightSessions();
 
 
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 
 var app = builder.Build();
@@ -43,5 +48,55 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.MapCarter();
+
+
+// Configure Custom exception handler
+app.UseExceptionHandler(options => { });  
+
+
+// Configure the exception handler The exception handler
+// is a middleware that catches exceptions and returns a ProblemDetails object with the exception details.
+
+#region Normal Validation
+//app.UseExceptionHandler(exceptionHandelerApp =>
+//{
+
+
+//    exceptionHandelerApp.Run(async context =>
+//    {
+
+//        var exeption = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+//        if (exeption is null)
+//        {
+//            return;
+//        }
+
+//        var promblemDetails = new ProblemDetails
+//        {
+//            Title = exeption.Message,
+//            Status = StatusCodes.Status500InternalServerError,
+//            Detail = exeption.StackTrace
+//        };
+
+//        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(exeption, exeption.Message);
+
+
+//        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+//        context.Response.ContentType = "application/problem+json";
+
+//        await context.Response.WriteAsJsonAsync(promblemDetails);
+
+
+
+
+
+
+
+
+//    });
+//}); 
+#endregion
 
 app.Run();
