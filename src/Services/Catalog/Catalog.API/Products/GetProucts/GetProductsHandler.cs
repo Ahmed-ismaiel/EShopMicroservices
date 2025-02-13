@@ -9,13 +9,14 @@ namespace Catalog.API.Products.GetProucts
 
 
 
-    public class GetProductsQueryHandler(IDocumentSession session , ILogger<GetProductsQueryHandler> logger) 
+    public class GetProductsQueryHandler(IDocumentSession session 
+        ) 
         : IQueryHandler<GetProductsQuery, GetProductsResult>
     {
         public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
         {
             //log.LogInformation("Getting all products");
-            logger.LogInformation("Getting all products {@query}" , query);
+            //logger.LogInformation("Getting all products {@query}" , query);
 
             // business logic to get all products
 

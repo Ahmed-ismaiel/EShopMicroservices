@@ -46,13 +46,13 @@ namespace Catalog.API.Products.CreateProduct
     //}
 
     public class CreateProductCommandHandler(IDocumentSession session
-        , ILogger<CreateProductCommandHandler> logger) 
+        ) 
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
 
-            logger.LogInformation("createproductHandler {@Command}", command);
+           // logger.LogInformation("createproductHandler {@Command}", command);
 
             // business logic to create a product
 

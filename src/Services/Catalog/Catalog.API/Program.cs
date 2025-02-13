@@ -1,8 +1,4 @@
 
-using BuildingBlocks.Exceptions.Handler;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container.
@@ -22,6 +18,11 @@ builder.Services.AddMediatR(configuration =>
     // hena 3mlt confiure lel global behavior pipeline 3shan y3ml validation lel request 
     // abl ma y3ml handle
     configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+
+    configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
+
+    
+
 });
 
 // configure validators from another assembly
@@ -38,6 +39,12 @@ builder.Services.AddMarten(opts =>
    opts.Connection(builder.Configuration.GetConnectionString("Database")!);
 
 }).UseLightweightSessions();
+
+// Hena hn3ml seeding ll data bt3tna 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
