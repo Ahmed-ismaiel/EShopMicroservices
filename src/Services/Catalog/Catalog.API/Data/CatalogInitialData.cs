@@ -19,7 +19,7 @@ namespace Catalog.API.Data
 
             // Add products UPSERT to the database by passing object array
             session.Store<Product>(GetPreConfiguredProducts());
-            await session.SaveChangesAsync();
+            await session.SaveChangesAsync(cancellation);
 
 
         }

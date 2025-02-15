@@ -2,9 +2,11 @@
 namespace Catalog.API.Products.GetProucts
 {
 
-   // public record GetProductsReqeust();
-      
-      public record GetProductsResponse(IEnumerable<Product> Products);
+    // will use pagination
+
+    public record GetProductsReqeust(int? PageNumber = 1 , int? PageSize = 20);
+
+    public record GetProductsResponse(IEnumerable<Product> Products);
 
     public class GetProductsEndpoint : ICarterModule
     {
@@ -12,12 +14,14 @@ namespace Catalog.API.Products.GetProucts
         {
             // Mish lazm ab3t l request 
             app.MapGet("/products",
-                async ( ISender sender) =>  
+                async ( [AsParameters] GetProductsQuery request , ISender sender) =>  
                 { 
-                    var Query = await sender.Send(new GetProductsQuery());
-                    var response = Query.Adapt<GetProductsResponse>();
-                    return Results.Ok(response);
 
+                    var Query = request.Adapt<GetProductsQuery>();
+                    var result = await sender.Send(Query);
+                    var response = result.Adapt<GetProductsResponse>();
+                    return Results.Ok(response);
+                                                                                                                 
                 });
 
         }
