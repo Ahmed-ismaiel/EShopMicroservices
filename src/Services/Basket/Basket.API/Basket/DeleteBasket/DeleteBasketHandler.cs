@@ -22,6 +22,5 @@
             return new DeleteBasketResult(true);
         }
     }
-    {
-    }
+    
 }

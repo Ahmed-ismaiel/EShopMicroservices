@@ -3,7 +3,7 @@
 namespace Basket.API.Basket.GetBasket
 {
 
-    public record GetBasketRequest(string UserName);
+   // public record GetBasketRequest(string UserName);
 
     public record GetBasketResponse(ShoppingCart Cart);
 
@@ -13,7 +13,7 @@ namespace Basket.API.Basket.GetBasket
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapGet("/baket/{userName}", async (string userName, ISender sender) =>
+            app.MapGet("/basket/{userName}", async (string userName, ISender sender) =>
             {
 
 
@@ -23,7 +23,10 @@ namespace Basket.API.Basket.GetBasket
 
                 return response;
 
-            });
+            }).WithName("Get Basket for a user")
+            .Produces<GetBasketResponse>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithDescription("Get Basket for a user");
         }
     }
 }

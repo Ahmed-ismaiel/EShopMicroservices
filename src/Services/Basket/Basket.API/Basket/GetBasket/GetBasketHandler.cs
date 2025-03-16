@@ -1,6 +1,4 @@
 ﻿
-
-
 namespace Basket.API.Basket.GetBasket
 {
 
