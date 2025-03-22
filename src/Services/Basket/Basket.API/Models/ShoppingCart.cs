@@ -2,7 +2,7 @@
 {
     public class ShoppingCart
     {
-
+        // instead of using Guid we use the username as the id
         public string UserName { get; set; } = default!;
 
         public List<ShoppingCartItem> Items { get; set; } = new ();

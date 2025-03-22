@@ -26,6 +26,18 @@ builder.Services.AddMediatR(configuration =>
 
 });
 
+// configure Marten and use lightweight sessions for Marten and give the connection string
+
+builder.Services.AddMarten(opts =>
+{
+
+    opts.Connection(builder.Configuration.GetConnectionString("Database")!);
+
+    // Hena ana b2olo en el identity bta3 el shopping cart hya el username
+    opts.Schema.For<ShoppingCart>().Identity(x => x.UserName);
+
+}).UseLightweightSessions();
+
 
 var app = builder.Build();
 
