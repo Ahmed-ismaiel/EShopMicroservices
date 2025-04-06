@@ -1,4 +1,5 @@
 using BuildingBlocks.Behaviors;
+using BuildingBlocks.Exceptions.Handler;
 using Carter;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,10 @@ builder.Services.AddMediatR(configuration =>
 
 });
 
+// congigure the Basket repository
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
 // configure Marten and use lightweight sessions for Marten and give the connection string
 
 builder.Services.AddMarten(opts =>
@@ -38,12 +43,19 @@ builder.Services.AddMarten(opts =>
 
 }).UseLightweightSessions();
 
+// bstkhdm l custome exception handler middleware 3asshan y3ml handle lel exceptions
+
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+
 
 var app = builder.Build();
 
 //  Configure The HTTP request Pipeline
 
 app.MapCarter();
+// Configure Custom exception handler
+app.UseExceptionHandler(options => { });
 
 app.MapGet("/", () => "Hello World!");
 

@@ -10,6 +10,19 @@ services:
       - "5432:5432"
     volumes:
       - postgres_catalog:/var/lib/postgresql/data
+     #---> Configured basketdb service in docker-compose.override.yml
+     # ---> Added the environment variable POSTGRES_DB=BasketDb
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BasketDb 
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_basket:/var/lib/postgresql/data
       
   catalog.api:
     environment:
