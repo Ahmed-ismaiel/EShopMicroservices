@@ -31,6 +31,21 @@ builder.Services.AddMediatR(configuration =>
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
+// msh hynf3 a3ml Register l IBasketRepository Aktr mn mara 3ashan akhr 7aga hya ly htshtghl 
+// 3shan kda nzlt scurtor owe astkhdmt l extension method bta3ha  
+
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+
+// configure the distributed cache 
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName = "Basket";
+
+});
+
+
 // configure Marten and use lightweight sessions for Marten and give the connection string
 
 builder.Services.AddMarten(opts =>
