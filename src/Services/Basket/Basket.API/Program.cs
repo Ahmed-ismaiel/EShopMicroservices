@@ -1,6 +1,8 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
 using Carter;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +64,15 @@ builder.Services.AddMarten(opts =>
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+// Add Health Checks to know if my code is running or not
+// then add health check for the database and redis
+
+builder.Services.AddHealthChecks()
+    .AddRedis(
+        builder.Configuration.GetConnectionString("Redis")!)
+    .AddNpgSql(
+        builder.Configuration.GetConnectionString("Database")!);
+
 
 
 var app = builder.Build();
@@ -71,6 +82,16 @@ var app = builder.Build();
 app.MapCarter();
 // Configure Custom exception handler
 app.UseExceptionHandler(options => { });
+
+// Expose health check endpoint
+app.MapHealthChecks("/health" ,
+
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+    
+   
 
 app.MapGet("/", () => "Hello World!");
 
