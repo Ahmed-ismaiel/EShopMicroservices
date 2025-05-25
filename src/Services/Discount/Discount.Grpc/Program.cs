@@ -15,6 +15,10 @@ builder.Services.AddDbContext<DiscountContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+// Apply Migrations 3ashan lma a3ml migration y3mly seed data  awl ma application yshtghl
+app.UseMigration();
+
 app.MapGrpcService<DiscountService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
