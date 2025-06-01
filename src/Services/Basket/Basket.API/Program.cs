@@ -1,6 +1,7 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
 using Carter;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -47,6 +48,19 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 });
 
+// Configure Grpc Client for Discount Service
+
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration.GetValue<string>("GrpcSettings:DiscountUrl")!);
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    // Configure the handler to use the default HTTP client handler
+    return new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+});
 
 // configure Marten and use lightweight sessions for Marten and give the connection string
 
