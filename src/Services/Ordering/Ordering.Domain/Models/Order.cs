@@ -11,7 +11,7 @@ namespace Ordering.Domain.Models
 
         private readonly List<OrderItem> _orderItems = new();
         // that it is an aggregate root with a specific identifier type of Guid.
-        public IReadOnlyList<OrderItem> Items => _orderItems.AsReadOnly();
+        public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
         public CustomerId CustomerId { get; private set; }
 

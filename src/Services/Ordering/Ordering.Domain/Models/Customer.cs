@@ -2,7 +2,7 @@
 
 namespace Ordering.Domain.Models
 {
-    public class Cutomer : Entity<CustomerId>
+    public class Customer : Entity<CustomerId>
     {
         // The Cutomer class represents a customer in the domain model.
         // It extends the Entity<Guid> class, indicating that it is an entity with a specific identifier type of Guid.
@@ -13,7 +13,7 @@ namespace Ordering.Domain.Models
 
         public string Email { get; private set; } = default!;
 
-        public static Cutomer Create(CustomerId id, string name, string email)
+        public static Customer Create(CustomerId id, string name, string email)
         {
             // Factory method to create a new customer instance.
             // It initializes the Name and Email properties and returns a new Cutomer instance.
@@ -25,7 +25,7 @@ namespace Ordering.Domain.Models
             {
                 throw new ArgumentException("Email cannot be null or empty.", nameof(email));
             }
-            return new Cutomer
+            return new Customer
             {
                 Id = id,
                 Name = name,

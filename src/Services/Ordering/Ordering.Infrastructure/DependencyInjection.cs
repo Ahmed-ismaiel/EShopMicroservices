@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +22,8 @@ namespace Ordering.Infrastructure
             // Register infrastructure services here
             var connectionString = configuration.GetConnectionString("Database");
             // Example: services.AddScoped<IOrderRepository, OrderRepository>();\
-            //services.AddDbContext<ApplicationDbContext>(Options => Options.useSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(Options =>
+            Options.UseSqlServer(connectionString));
             return services;
         }
 

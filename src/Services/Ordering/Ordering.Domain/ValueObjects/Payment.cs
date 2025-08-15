@@ -7,10 +7,10 @@
         public string CardNumber { get; init; } = default!;
         public string ExpirationDate { get; init; } = default!;
         public string Cvv { get; init; } = default!;
-        public string PaymentMethod { get; init; } = default!;
+        public int PaymentMethod { get; } = default!;
 
         protected Payment() { }
-        private Payment(string? cardName, string cardNumber, string expirationDate, string cvv, string paymentMethod)
+        private Payment(string? cardName, string cardNumber, string expirationDate, string cvv, int paymentMethod)
         {
             CardName = cardName;
             CardNumber = cardNumber;
@@ -19,7 +19,7 @@
             PaymentMethod = paymentMethod;
         }
 
-        public static Payment of(string? cardName, string cardNumber, string expirationDate, string cvv, string paymentMethod)
+        public static Payment of(string? cardName, string cardNumber, string expirationDate, string cvv, int paymentMethod)
         {
             ArgumentNullException.ThrowIfNull(cardNumber, nameof(cardNumber));
             ArgumentNullException.ThrowIfNull(expirationDate, nameof(expirationDate));
