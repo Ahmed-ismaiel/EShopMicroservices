@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Infrastructure.Data;
+using Ordering.Infrastructure.Data.Interceptors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,15 @@ namespace Ordering.Infrastructure
             var connectionString = configuration.GetConnectionString("Database");
             // Example: services.AddScoped<IOrderRepository, OrderRepository>();\
             services.AddDbContext<ApplicationDbContext>(Options =>
-            Options.UseSqlServer(connectionString));
+            {
+
+                // Add the AuditableEntityInterceptor to the DbContext options
+                // This interceptor will automatically update auditable properties on entities
+                Options.AddInterceptors(new AuditableEntityInterceptor());
+                // Configure the DbContext to use SQL Server with the connection string from configuration
+                Options.UseSqlServer(connectionString);
+            }
+                );
             return services;
         }
 
