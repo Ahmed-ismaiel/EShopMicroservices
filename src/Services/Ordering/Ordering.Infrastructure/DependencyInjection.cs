@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Ordering.Application.Data;
 using Ordering.Infrastructure.Data;
 using Ordering.Infrastructure.Data.Interceptors;
 using System;
@@ -20,6 +22,10 @@ namespace Ordering.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services
             , IConfiguration configuration)
         {
+
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+
             // Register infrastructure services here
             var connectionString = configuration.GetConnectionString("Database");
             // Example: services.AddScoped<IOrderRepository, OrderRepository>();\
@@ -28,11 +34,17 @@ namespace Ordering.Infrastructure
 
                 // Add the AuditableEntityInterceptor to the DbContext options
                 // This interceptor will automatically update auditable properties on entities
-                Options.AddInterceptors(new AuditableEntityInterceptor());
                 // Configure the DbContext to use SQL Server with the connection string from configuration
-                Options.UseSqlServer(connectionString);
+                services.AddDbContext<ApplicationDbContext>((sp, options) =>
+                {
+                    options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                    options.UseSqlServer(connectionString);
+                });
             }
                 );
+            
+                services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
             return services;
         }
 

@@ -74,7 +74,8 @@ namespace Ordering.Domain.Models
             OrderName orderName,
             Address shippingAddress,
             Address billingAddress,
-            Payment payment)
+            Payment payment,
+             OrderStatus status)
         {
             // Method to update the order details.
             if (orderName == null) throw new ArgumentNullException(nameof(orderName));
@@ -85,6 +86,8 @@ namespace Ordering.Domain.Models
             ShippingAddress = shippingAddress;
             BillingAddress = billingAddress;
             Payment = payment;
+            Status = status;
+
             AddDomainEvent(new OrderUpdatedEvent(this));
         }
 
